@@ -2,6 +2,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
+const dbURI = 'mongodb+srv://dalsalahy:<password>@cluster0.6hcbgea.mongodb.net/?retryWrites=true&w=majority';
 
 //Express app
 const app = express();
