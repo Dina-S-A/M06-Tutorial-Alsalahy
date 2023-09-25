@@ -14,7 +14,11 @@ app.set ('view engine', 'ejs'); //set lets us set some settings it looks into vi
 //listen for request
 app.listen(3000); //starting the server
 
-//Middleware
+//Middleware and static files
+
+app.use(express.static('public')); // here we are telling that anything in the public folder is public and the broweser can accesss
+
+app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
 
 app.use((req, res, next) => {
    console.log('new request made:');
@@ -29,7 +33,7 @@ app.use((req, res, next) => {
    next();
  });
 
- app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
+ 
 
 
 // here app responds to get command it has 2 arguments (what app listens to , function(req,res))  req like get or post , res is what the server responds with
