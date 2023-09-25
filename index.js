@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const test = 'test';
+
 app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   res.render('index', { title: 'My Express App' });
