@@ -2,6 +2,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose  = require('mongoose');
+const Blog = require('./models/blog'); // importing Blog 
+const { render } = require('ejs');
 
 
 
@@ -9,11 +11,14 @@ const mongoose  = require('mongoose');
 const app = express();
 
 //connect to mongo db
-const dbURI = 'mongodb+srv://dalsalahy:Alrahman81$@cluster0.6hcbgea.mongodb.net/node-tuts?retryWrites=true&w=majority'
+const dbURI = 'mongodb+srv://dalsalahy:Alrahman81$@cluster0.6hcbgea.mongodb.net/node-tuts?retryWrites=true&w=majority';
+
 mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology: true})//the second argument is to resolve the deprication pronlem and it is not imortant
 //.then((result)=> console.log('connected to DB'))// fires when the connection is complete after it is v=connected to the db
-.then((result)=> app.listen(3000))//starting the server after the connection is established and listening for requists.
-.catch((err)=> console.log(err));
+
+.then( result => app.listen(3600))//starting the server after the connection is established and listening for requists.
+
+.catch( err => console.log(err));
 
 //register view engine
 app.set ('view engine', 'ejs'); //set lets us set some settings it looks into views folder for ejs files
@@ -24,10 +29,50 @@ app.set ('view engine', 'ejs'); //set lets us set some settings it looks into vi
 
 //Middleware and static files
 
-app.use(express.static('public')); // here we are telling that anything in the public folder is public and the broweser can accesss
+app.use(express.static('public')); // here we are telling that anything in the public folder is public and the browser can accesss
 
 
 app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
+
+//mongooose and mongo sandbox routes
+/*app.get('/add-blog' , (req,res)=>{
+       const blog = new Blog({
+         title: 'new blog 2',
+         snippet: 'about my new blog',
+         body: 'more about my new blog'
+       });
+       
+       blog.save() //saving this document to cluster
+       .then((result)=>{
+         res.send(result)
+       })
+       .catch((err)=>{
+         console.log(err);
+       });
+})
+
+app.get('/all-blogs', (req, res) => {
+  Blog.find()
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+
+
+app.get('/single-blog', (req, res) => {
+  Blog.findById('65132360b5b6eed58ab01886')
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+*/
 
 /*app.use((req, res, next) => {
    console.log('new request made:');
@@ -47,19 +92,24 @@ app.use(morgan('dev'));  // this is what we get on consol from this function (GE
 
 // here app responds to get command it has 2 arguments (what app listens to , function(req,res))  req like get or post , res is what the server responds with
 app.get ('/' , (req, res) => {
-const blogs = [
- {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
- {title: 'Mario finds starts', snippet: 'Lorem ipsum dolor sit amet consectetur'},
- {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-];
-
-    res.render('index' , { title : 'Home' , blogs:blogs}); // no need for the old code now , we are using ejs engine to render a view.// we added tilte home to send it to index file
-});                                       // here for blogs as they are the same I can simply write blogs one time and it will undertand.
+   res.redirect('/blogs');  
+});                                       
 
 
 app.get ('/about' , (req, res) => {  
    res.render('about' , { title : 'About'}); 
 });
+
+//all blogs routs
+app.get('/blogs', (req,res) => {
+  Blog.find().sort({createdAt: -1})
+  .then(result => {
+    render('index', { title: 'All Blogs', blogs : result});
+  })
+  .catch(err => {
+    console.log(err);
+  });
+})
 
 app.get ('/blogs/create' , (req, res) => {   
    res.render('create' , { title : 'Create a new blog'}); 
