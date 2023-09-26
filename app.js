@@ -1,27 +1,35 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const mongoose  = require('mongoose');
 
-const dbURI = 'mongodb+srv://dalsalahy:<password>@cluster0.6hcbgea.mongodb.net/?retryWrites=true&w=majority';
+
 
 //Express app
 const app = express();
+
+//connect to mongo db
+const dbURI = 'mongodb+srv://dalsalahy:Alrahman81$@cluster0.6hcbgea.mongodb.net/node-tuts?retryWrites=true&w=majority'
+mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology: true})//the second argument is to resolve the deprication pronlem and it is not imortant
+//.then((result)=> console.log('connected to DB'))// fires when the connection is complete after it is v=connected to the db
+.then((result)=> app.listen(3000))//starting the server after the connection is established and listening for requists.
+.catch((err)=> console.log(err));
 
 //register view engine
 app.set ('view engine', 'ejs'); //set lets us set some settings it looks into views folder for ejs files
 
 
 
-//listen for request
-app.listen(3000); //starting the server
+
 
 //Middleware and static files
 
 app.use(express.static('public')); // here we are telling that anything in the public folder is public and the broweser can accesss
 
+
 app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
    console.log('new request made:');
    console.log('host: ', req.hostname);
    console.log('path: ', req.path);
@@ -33,7 +41,7 @@ app.use((req, res, next) => {
    console.log('in the next middleware');
    next();
  });
-
+*/
  
 
 
