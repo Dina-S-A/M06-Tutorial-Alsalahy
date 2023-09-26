@@ -16,7 +16,7 @@ const dbURI = 'mongodb+srv://dalsalahy:Alrahman81$@cluster0.6hcbgea.mongodb.net/
 mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology: true})//the second argument is to resolve the deprication pronlem and it is not imortant
 //.then((result)=> console.log('connected to DB'))// fires when the connection is complete after it is v=connected to the db
 
-.then( result => app.listen(3600))//starting the server after the connection is established and listening for requists.
+.then( result => app.listen(3000))//starting the server after the connection is established and listening for requists.
 
 .catch( err => console.log(err));
 
@@ -33,6 +33,7 @@ app.use(express.static('public')); // here we are telling that anything in the p
 
 
 app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
+
 
 //mongooose and mongo sandbox routes
 /*app.get('/add-blog' , (req,res)=>{
@@ -97,14 +98,14 @@ app.get ('/' , (req, res) => {
 
 
 app.get ('/about' , (req, res) => {  
-   res.render('about' , { title : 'About'}); 
+   res.render('/about' , { title : 'About'}); 
 });
 
 //all blogs routs
 app.get('/blogs', (req,res) => {
   Blog.find().sort({createdAt: -1})
   .then(result => {
-    render('index', { title: 'All Blogs', blogs : result});
+    render('/index', { title: 'All Blogs', blogs : result});
   })
   .catch(err => {
     console.log(err);
@@ -120,5 +121,5 @@ app.get ('/blogs/create' , (req, res) => {
  // 404 page
  app.use((req, res) => { 
    // res.sendFile('./views/404.html', {root: __dirname});
-   res.status(404).render('404' , { title : '404'}); 
+   res.status(404).render('/404' , { title : '404'}); 
 });
