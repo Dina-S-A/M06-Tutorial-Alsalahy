@@ -33,7 +33,10 @@ app.use(express.static('public')); // here we are telling that anything in the p
 
 
 app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
-
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
 
 //mongooose and mongo sandbox routes
 /*app.get('/add-blog' , (req,res)=>{
@@ -93,19 +96,19 @@ app.get('/single-blog', (req, res) => {
 
 // here app responds to get command it has 2 arguments (what app listens to , function(req,res))  req like get or post , res is what the server responds with
 app.get ('/' , (req, res) => {
-   res.redirect('/blogs');  
+   res.redirect('blogs');  
 });                                       
 
 
 app.get ('/about' , (req, res) => {  
-   res.render('/about' , { title : 'About'}); 
+   res.render('about' , { title : 'About'}); 
 });
 
 //all blogs routs
 app.get('/blogs', (req,res) => {
   Blog.find().sort({createdAt: -1})
   .then(result => {
-    render('/index', { title: 'All Blogs', blogs : result});
+    res.render('index', { title: 'All Blogs', blogs : result});
   })
   .catch(err => {
     console.log(err);
@@ -121,5 +124,5 @@ app.get ('/blogs/create' , (req, res) => {
  // 404 page
  app.use((req, res) => { 
    // res.sendFile('./views/404.html', {root: __dirname});
-   res.status(404).render('/404' , { title : '404'}); 
+   res.status(404).render('404' , { title : '404'}); 
 });
