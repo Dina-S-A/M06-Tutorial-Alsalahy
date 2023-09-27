@@ -8,9 +8,12 @@
     <h2>All Blogs</h2>  
     <% if (blogs.length>0) {  %>  <!-- this code and what is between will execute if blogs has anything in it-->
         <% blogs.forEach(blog => { %>
-        <h3 class="title" ><%= blog.title%></h3>
-        <p class="snippet"><%= blog.snippet%></p>
 
+         <a class="single" href="/blogs/<%= blog._id %>">   <!--here we are adding anchore to direct so bothe h3 and p are links direct the page to url including the id of the blog-->
+
+             <h3 class="title" ><%= blog.title%></h3>
+            <p class="snippet"><%= blog.snippet%></p>
+        </a>
         <% })%>
     <% } else {%>  
         <p >There are no blogs to display...</p>

@@ -30,7 +30,7 @@ app.set ('view engine', 'ejs'); //set lets us set some settings it looks into vi
 //Middleware and static files
 
 app.use(express.static('public')); // here we are telling that anything in the public folder is public and the browser can accesss
-
+app.use(express.urlencoded({ extended: true }));// this guy takes what comes in the url and encoded in a way that can be sent to the DB // extended :true is an extra option
 
 app.use(morgan('dev'));  // this is what we get on consol from this function (GET / 304 11.549 ms - -)
 app.use((req, res, next) => {
@@ -93,6 +93,7 @@ app.get('/single-blog', (req, res) => {
 */
  
 
+//ROUTES
 
 // here app responds to get command it has 2 arguments (what app listens to , function(req,res))  req like get or post , res is what the server responds with
 app.get ('/' , (req, res) => {
@@ -104,7 +105,8 @@ app.get ('/about' , (req, res) => {
    res.render('about' , { title : 'About'}); 
 });
 
-//all blogs routs
+//all blogs routes
+
 app.get('/blogs', (req,res) => {
   Blog.find().sort({createdAt: -1})
   .then(result => {
@@ -119,6 +121,44 @@ app.get ('/blogs/create' , (req, res) => {
    res.render('create' , { title : 'Create a new blog'}); 
 });
 
+//post to DB new blog from creat blog page
+app.post('/blogs', (req, res) => {
+  //console.log(req.body);
+  const blog = new Blog(req.body);
+  blog.save()
+    .then(result => {
+      res.redirect('/blogs'); // send the page back to the blogs page
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+
+// retrieving one blog with certain id
+
+app.get('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id)
+    .then(result => {
+      res.render('details', { blog: result, title: 'Blog Details' });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.delete('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+  
+  Blog.findByIdAndDelete(id)
+    .then(result => {
+      res.json({ redirect: '/blogs' });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 
  // 404 page
