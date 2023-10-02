@@ -38,6 +38,22 @@ app.use((req, res, next) => {
   next();
 });
 
+/*app.use((req, res, next) => {
+   console.log('new request made:');
+   console.log('host: ', req.hostname);
+   console.log('path: ', req.path);
+   console.log('method: ', req.method);
+   next(); // we have to include that so the browser keep moving and execute the next line.
+ });
+
+ app.use((req, res, next) => { // added this to test the next from the previous function
+   console.log('in the next middleware');
+   next();
+ });
+*/
+ 
+
+
 //mongooose and mongo sandbox routes
 /*app.get('/add-blog' , (req,res)=>{
        const blog = new Blog({
@@ -78,20 +94,6 @@ app.get('/single-blog', (req, res) => {
 });
 */
 
-/*app.use((req, res, next) => {
-   console.log('new request made:');
-   console.log('host: ', req.hostname);
-   console.log('path: ', req.path);
-   console.log('method: ', req.method);
-   next(); // we have to include that so the browser keep moving and execute the next line.
- });
-
- app.use((req, res, next) => { // added this to test the next from the previous function
-   console.log('in the next middleware');
-   next();
- });
-*/
- 
 
 //ROUTES
 

@@ -58,6 +58,7 @@
     
     /* index styles */
      .blogs a{
+      color: rgb(12, 12, 12);
         display: block;
         margin: 40px 0;
         padding-left: 30px;
